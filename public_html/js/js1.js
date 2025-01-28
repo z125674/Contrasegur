@@ -139,25 +139,24 @@ var diccionari = ["password", "guest", "dragon", "baseball", "football", "monkey
               var r = new FileReader();
               r.onload = function(e) { 
                       var contents = e.target.result;
-                alert( "Got the file.n" 
+                /* alert( "Got the file.n" 
                       +"name: " + f.name + "n"
                       +"type: " + f.type + "n"
                       +"size: " + f.size + " bytesn"
                       + "starts with: " + contents.substr(0, contents.indexOf("\n"))
-                ); 
-                    window.alert("1");                 
+                ); */
+                                    
                     if (contents.substr(0,1) === "/") {
                         stream1 = contents.replaceAll("\r\n", ",");
                         stream2 = stream1.replaceAll("/", "");
                         stream3 = stream2.split(",");
-                        window.alert("2");
                         for (i=0; i < stream3.length; i++) {
                            patrons[i] = new RegExp(stream3[i]); 
                         }
                     }
                     else {
                        diccionari=contents.replaceAll("\n", ","); 
-                       window.alert("3");
+                       
                     }
                 }
               
@@ -166,6 +165,7 @@ var diccionari = ["password", "guest", "dragon", "baseball", "football", "monkey
               alert("Failed to load file");
             }
         }
+        window.alert(patrons); // no me sale, hace refresh
             function rep(password) { // works, only true or false
                 const repmult = /(.)\1{2,}/;
                 if (repmult.test(password.toLowerCase()) === true) {
@@ -181,10 +181,11 @@ var diccionari = ["password", "guest", "dragon", "baseball", "football", "monkey
                 }
                    return "La contrasenya NO és comuna"; 
             }
+            
             function checkpatrons(password) {
-                window.alert("4");
                 for (i = 0; i < patrons.length; i++) {
                     if (patrons[i].test(password.toLowerCase()) === true) {
+                        window.alert(patrons[i]); // me sale algo q no es YAY
                         return "La contrasenya conté un patró";
                     }
                 }
