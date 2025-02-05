@@ -4,7 +4,7 @@
  */
 var diccionari = [];
 var patrons = [];
-/* var diccionari = ["password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
+var diccionari = ["password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
     "shadow", "master", "mustang", "michael", "pussy", "superman", "fuckyou", "121212", "killer", "trustno1", "jordan", 
     "jennifer", "hunter", "buster", "soccer", "harley", "batman", "tigger", "sunshine", "iloveyou", "fuckme", "charlie", 
     "thomas", "hockey", "ranger", "daniel", "starwars", "klaster", "112233", "george", "asshole", "computer", "michelle", 
@@ -29,7 +29,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     /oiu/, /onm/, /oñn/, /opq/, /poi/, /pon/, /poñ/, /pqr/, /qa1/, /qaz/, /qpo/, /qrs/, /qsd/, /qwe/, /rew/, 
     /rez/, /rfv/, /rqp/, /rst/, /rty/, /sdf/, /srq/, /stu/, /sw2/, /sz2/, /tgb/, /tre/, /tsr/, /tuv/, /tyu/, 
     /uio/, /ujm/, /uts/, /uvw/, /uyt/, /vbn/, /vcx/, /vfr/, /vut/, /vwx/, /wer/, /wqa/, /wsx/, /wvu/, /wxc/, 
-    /wxy/, /xcv/, /xsw/, /xsz/, /xwv/, /xyz/, /yhn/, /ytr/, /yui/, /yxw/, /zaq/, /zer/, /zsx/, /zxc/, /zyx/]; */
+    /wxy/, /xcv/, /xsw/, /xsz/, /xwv/, /xyz/, /yhn/, /ytr/, /yui/, /yxw/, /zaq/, /zer/, /zsx/, /zxc/, /zyx/]; 
             function Comprovar() {
                 document.getElementById("caracter").checked = false;
                 document.getElementById("majuscula").checked = false;
@@ -137,8 +137,8 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                         }
                     }
                     else {
-                       diccionari=contents.replaceAll("\n", ","); 
-                       window.alert(diccionari);
+                       stream1=contents.replaceAll("\n", ","); 
+                       diccionari=stream1.split(",");
                     }
                 };
               
@@ -152,18 +152,8 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                 const repmult = /(.)\1{2,}/;
                 return repmult.test(password.toLowerCase());
             }
-            /* function checkdiccionari(password) {
-                    return diccionari.test(password.toLowerCase());
-                } */
            function checkdiccionari(password) {
-                for (i=0; i < diccionari.length; i++) {
-                    window.alert(diccionari[i]);
-                    if (diccionari[i].includes(password.toLowerCase())=== true) { 
-                        return true;
-                    }
-                    else 
-                        return false;
-                }
+               return diccionari.includes(password.toLowerCase()); 
             }
             
             function checkpatrons(password) {
@@ -171,7 +161,6 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                     if (patrons[i].test(password.toLowerCase()) === true) {
                         return true;
                     }
-                    
                 }
                 return false;
             }
