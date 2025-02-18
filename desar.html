@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this template
+-->
+<html>
+    <script>
+         function setCookie(cname, cvalue, exdays) {
+                    const d = new Date();
+                    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+                    let expires = "expires="+ d.toUTCString();
+                    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                    window.alert("setCookie worked!");
+              }
+            function getCookie(cname) {
+                let name = cname + "=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i <ca.length; i++) {
+                  let c = ca[i];
+                  while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                  }
+                  if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                  }
+                }
+                return "";
+            } 
+            function checkCookie() {
+                let username = getCookie("username");
+                if (username != "") {
+                 alert("Welcome again " + username);
+                } else { // change this, we don't want a username w/o a password 
+                  username = prompt("Please enter your name:", "");
+                  if (username != "" && username != null) {
+                    setCookie("username", username, 365);
+                  }
+                }
+              }
+    </script>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div>Vols desar l'inici de sessió a ContraSegur?</div>
+        <form>
+            <label>Usuari o correu:</label>
+            <input type="text" id="usuari"><br>
+            <script>
+            document.getElementById('usuari').value = localStorage.getItem("username") || "";
+            </script>
+            <label>Contrasenya:</label>
+            <input type="password" id="password"><br>
+            <script>
+            document.getElementById('usuari').value = localStorage.getItem("password") || "";
+            </script>
+            <button id="desar" onclick="setCookie(cname, cvalue, exdays);" value="submit">Desar</button><br><br>
+            <button id="noDesar" onclick="index.html" value="submit">No Desar</button><br><br>
+        </form>
+    </body>
+</html>
