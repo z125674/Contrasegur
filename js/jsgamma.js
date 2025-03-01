@@ -191,11 +191,47 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
              function desar() {
                 result = confirm("Vols guardar l'usuari i contrasenya?");
                 if (result === true) {
-                    localStorage.setItem("username", document.getElementById("usuari").value);
+                    localStorage.setItem("usuari", document.getElementById("usuari").value);
                     localStorage.setItem("password", document.getElementById("password").value);
-                    const mWindow = window.open("desar.html", "_blank", "width=800, height=800, left=0, top=0, \n\
+                    const mWindow = window.open("desar.html", "_blank", "width=450, height=500, left=0, top=0, \n\
                             location=0, menubar=0, resizable=0, scrollbars=0, status=0, titlebar=0, toolbar=0"); }
               }
+              function showpassword() {
+              var x = document.getElementById("password");
+              if (x.type === "password") {
+                x.type = "text";
+              } else {
+                x.type = "password";
+              }
+          }
+    function generatePassword(length = 12) {
+    const lowercase = "abcdefghijklmnopqrstuvwxyzàèéíòóúüçñ";
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZÀÈÉÍÒÓÚÜÇÑ";
+    const numbers = "0123456789";
+    const specialChars = "!@#$%^&*()_+[]{}|;:,.<>?/~`-=¡¿";
+    const allChars = lowercase + uppercase + numbers + specialChars;
+
+    function getRandomChar(set) {
+        return set[Math.floor(Math.random() * set.length)];
+    }
+
+    let password = [
+        getRandomChar(lowercase),
+        getRandomChar(uppercase),
+        getRandomChar(numbers),
+        getRandomChar(specialChars)
+    ];
+
+    while (password.length < length) {
+        password.push(getRandomChar(allChars));
+    }
+
+    return password.sort(() => Math.random() - 0.5).join('');
+}
+    function generateAndSetPassword() {
+        document.getElementById('password').value = generatePassword();
+    }
+            
             
 
             
