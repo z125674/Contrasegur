@@ -26,24 +26,45 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
         }
 
             function handleLogin() {
-                let username = document.getElementById('usuari').value; 
-                let password = document.getElementById('password').value; 
+                let usuari = document.getElementById('usuari').value;
+                let password = document.getElementById('password').value;
 
-                let storedValue = getCookie(username); 
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let cookies = decodedCookie.split(';');
+
+                let storedValue = null;
+
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    let parts = cookie.split('=');
+
+                    if (parts[0] === usuari) {
+                        storedValue = parts[1];
+                        break;
+                    }
+                }
 
                 if (!storedValue) {
-                    setCookie(username, password, 1000);
+                    setCookie(usuari, password, 1000);
                     alert("Inici de sessió guardat!");
                 } else {
-                    alert("Benvingut de nou " + username);
+                    if (storedValue !== password) {
+                        let confirmChange = confirm("La contrasenya és diferent. Vols actualitzar-la?");
+                        if (confirmChange) {
+                            setCookie(usuari, password, 1000);
+                            alert("Contrasenya actualitzada correctament!");
+                        }
+                    } else {
+                        alert("Benvingut de nou " + usuari);
+                    }
                 }
             }
-
             function funcionteclado() {
                 document.getElementById("teclado").hidden = !document.getElementById("teclado").hidden;
             }
             function deletecookie() {
-                document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                usuari = document.getElementById('usuari').value;
+                document.cookie = usuari + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
                 window.alert("Inici de sessió s'ha esborrat!");
             }
             function showpassword() {
@@ -53,8 +74,37 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
               } else {
                 x.type = "password";
               }
-            }
-            console.log(document.cookie); 
+            } 
+     
+            function saved() {
+                const myWindow = window.open("", "_blank", "width=450, height=500, left=0, top=0, \n\
+                            location=0, menubar=0, resizable=0, scrollbars=0, status=0, titlebar=0, toolbar=0");
+                 myWindow.document.open();
+                myWindow.document.write(`
+                      <html>
+                      <head>
+                          <meta charset="UTF-8">
+                          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                      </head>
+                      <body>
+                          <table border="1">
+                              <tr>
+                                  <th>Usuari o correu:</th>
+                                  <th>Contrasenya:</th>
+                              </tr>
+                  `);                 
+                 decodedCookie = decodeURIComponent(document.cookie);
+                 cookies = decodedCookie.split(';');
+          
+                for (let i = 0; i < cookies.length; i++) {
+                    let ca = cookies[i].split("=");
+                    myWindow.document.write("<tr><td>" + ca[0] + "</td><td>" + ca[1] + "</td></tr>");
+                }
+
+                myWindow.document.write("</table></body></html>");
+                myWindow.document.close();
+                 
+            } 
     </script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,7 +129,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
             <button id="showteclado" type="button" onclick="funcionteclado();"><img src="img/keyboard.png" alt=""></button>
             <button id="deletecookie" type="button" onclick="deletecookie();"><img src="img/trash-can.png" alt=""></button> 
             <button id="showpassword" type="button" onclick="showpassword();">Mostrar</button>
-            <button id="nextwindow" type="button" onclick="">new window</button>
+            <button id="nextwindow" type="button" onclick="saved();">Mostrar els inicis de sessió desats</button>
         <img src="img/password_.png" width="400">
         
             <div id="teclado" translate="no" hidden>
