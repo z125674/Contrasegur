@@ -342,29 +342,9 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         // SELECT * FROM TblTextosGUI;
         alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
                 SELECT * FROM TblTextosGUI;',
-            [], function(idiomes) {Print_Data(TblTextosGUI = idiomes.pop());}
-            // [], function(idiomes) {SQL_TextosGUI(IdIdioma, idiomes.pop());}
+            // [], function(idiomes) {Print_Data(TblTextosGUI = idiomes.pop());}
+            [], function(idiomes) {SQL_TextosGUI(IdIdioma, idiomes.pop());}
         ); 
-    }
-    function AlaWeb_SQLite(IdIdioma) {  
-        // window.alert("AlaWeb_SQLite IdIdioma = '" + IdIdioma + "'");
-        config = {
-            locateFile: filename => `/dist/${filename}`
-        };
-        // The `initSqlJs` function is globally provided by all of the main dist files if loaded in the browser.
-        // We must specify this locateFile function if we are loading a wasm file from anywhere other than the 
-        // current html page's folder.
-
-        // Recuperam de la base de dades els TextosGUI per tots els Idiomes
-        // SELECT * FROM TblTextosGUI;
-        alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
-                SELECT * FROM TblTextosGUI;',
-            [], function(idiomes) {Print_Data(TblTextosGUI = idiomes.pop());
-        }
-            
-          // [], function(idiomes) {SQL_TextosGUI(IdIdioma, idiomes.pop());}
-        ); 
-        SQL_TextosGUI(IdIdioma, Idiomes);
         // alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
         //   SELECT Password FROM TblDiccionari WHERE IdIdioma IS NULL OR IdIdioma="ca" OR IdIdioma=""'),
         // [], function(idiomes) {SQL_Diccionari(TblDiccionari = Password.pop());} // check probably not right
@@ -379,7 +359,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
             Idiomes = Idiomes_dft;
         }
     }  
-    /* function Print_Data(res) {
+    function Print_Data(res) {
     for (var i in res)
     {
        // console.log("row " + i);
@@ -391,7 +371,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
           window.alert("res[" + i + "][" +j + "] = " + res[i][j]);
          }
     }
-    } */
+    }
     function CanviarIdioma(IdIdioma) {
         AlaWeb_SQLite(IdIdioma);
         Idioma = Idiomes.find(Idioma => Idioma.IdIdioma == IdIdioma);
@@ -424,6 +404,4 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         // document.getElementById("Patrons").innerHTML = Idioma.Patrons;
         // document.getElementById("Mostrartaula").innerHTML = Idioma.Mostrartaula;
         // document.getElementById("Amagartaula").innerHTML = Idioma.Amagartaula;
-
     }
-    
