@@ -4,7 +4,7 @@
  */
 var diccionarialt = [];
 var patrons = [];
-var diccionarialt = ["Password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
+/* var diccionarialt = ["Password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
     "shadow", "master", "mustang", "michael", "pussy", "superman", "fuckyou", "121212", "killer", "trustno1", "jordan", 
     "jennifer", "hunter", "buster", "soccer", "harley", "batman", "tigger", "sunshine", "iloveyou", "fuckme", "charlie", 
     "thomas", "hockey", "ranger", "daniel", "starwars", "klaster", "112233", "george", "asshole", "computer", "michelle", 
@@ -18,7 +18,7 @@ var diccionarialt = ["Password", "guest", "dragon", "baseball", "football", "mon
     "eagles", "melissa", "boomer", "booboo", "spider", "nascar", "monster", "tigers", "yellow", "gateway", "marina", 
     "diablo", "bulldog", "compaq", "purple", "hardcore", "banana", "junior", "hannah", "porsche", "lakers", "iceman", 
     "money", "cowboys", "london", "tennis", "ncc1701", "coffee", "scooby", "miller", "boston", "q1w2e3r4", "fuckoff", 
-    "brandon", "yamaha", "chester", "mother", "forever", "johnny", "edward", "oliver", "redsox", "player", "nikita"];
+    "brandon", "yamaha", "chester", "mother", "forever", "johnny", "edward", "oliver", "redsox", "player", "nikita"]; */
 var diccionari = new Set(diccionarialt);
 var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /321/, /345/, /3ed/, /432/, /456/,  
     /4rf/, /543/, /567/, /5tg/, /654/, /678/, /6yh/, /765/, /789/, /7uj/, /876/, /890/, /8ik/, /987/, /9ol/, 
@@ -343,12 +343,28 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
                 SELECT * FROM TblTextosGUI;',
             // [], function(idiomes) {Print_Data(TblTextosGUI = idiomes.pop());}
-            [], function(idiomes) {SQL_TextosGUI(IdIdioma, idiomes.pop());}
+            [], function(idiomes) {
+                SQL_TextosGUI(IdIdioma, idiomes.pop());
+            }
         ); 
         // alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
         //   SELECT Password FROM TblDiccionari WHERE IdIdioma IS NULL OR IdIdioma="ca" OR IdIdioma=""'),
         // [], function(idiomes) {SQL_Diccionari(TblDiccionari = Password.pop());} // check probably not right
+        alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \
+            SELECT Password FROM TblDiccionari WHERE IdIdioma = ? OR IdIdioma = "" OR IdIdioma IS NULL;',
+        [IdIdioma],
+        function(rows) {
+            SQL_Diccionari(rows);
+        }
+    );
     }
+    function SQL_Diccionari(TblDiccionari) {
+       if (TblDiccionari && TblDiccionari.length > 0) {
+           for (let i = 0; i < TblDiccionari.length; i++) {
+               diccionari.add(TblDiccionari[i].Password.toLowerCase());
+           }
+       }
+   }
     function SQL_TextosGUI(IdIdioma, TblTextosGUI) {
         Idiomes = TblTextosGUI;
         if (Idiomes.length == 0) {
