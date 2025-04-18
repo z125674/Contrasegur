@@ -4,7 +4,7 @@
  */
 var diccionarialt = [];
 var patrons = [];
-/* var diccionarialt = ["Password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
+var diccionarialt = ["Password", "guest", "dragon", "baseball", "football", "monkey", "letmein", "696969", 
     "shadow", "master", "mustang", "michael", "pussy", "superman", "fuckyou", "121212", "killer", "trustno1", "jordan", 
     "jennifer", "hunter", "buster", "soccer", "harley", "batman", "tigger", "sunshine", "iloveyou", "fuckme", "charlie", 
     "thomas", "hockey", "ranger", "daniel", "starwars", "klaster", "112233", "george", "asshole", "computer", "michelle", 
@@ -18,8 +18,9 @@ var patrons = [];
     "eagles", "melissa", "boomer", "booboo", "spider", "nascar", "monster", "tigers", "yellow", "gateway", "marina", 
     "diablo", "bulldog", "compaq", "purple", "hardcore", "banana", "junior", "hannah", "porsche", "lakers", "iceman", 
     "money", "cowboys", "london", "tennis", "ncc1701", "coffee", "scooby", "miller", "boston", "q1w2e3r4", "fuckoff", 
-    "brandon", "yamaha", "chester", "mother", "forever", "johnny", "edward", "oliver", "redsox", "player", "nikita"]; */
+    "brandon", "yamaha", "chester", "mother", "forever", "johnny", "edward", "oliver", "redsox", "player", "nikita"];
 var diccionari = new Set(diccionarialt);
+var Diccionari = new Set(); // TBLDICCIONARI CHANGES here i made a new set for the database
 var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /321/, /345/, /3ed/, /432/, /456/,  
     /4rf/, /543/, /567/, /5tg/, /654/, /678/, /6yh/, /765/, /789/, /7uj/, /876/, /890/, /8ik/, /987/, /9ol/, 
     /abc/, /aq1/, /aqw/, /asd/, /aze/, /bcç/, /bcd/, /bgt/, /bnm/, /bvc/, /cba/, /çcb/, /cçd/, /cde/, /çde/, 
@@ -156,8 +157,8 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                 const repmult = /(.)\1{2,}/;
                 return repmult.test(Password.toLowerCase());
             }
-           function checkdiccionari(Password) {
-               return diccionari.has(Password.toLowerCase()); 
+           function checkdiccionari(Password) { // TBLDICCIONARI CHANGES here i changed diccionari to Diccionari and im not sure if Password should be password
+               return Diccionari.has(Password.toLowerCase()); 
             }
 
             function checkpatrons(Password) {
@@ -328,6 +329,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     ];
     var Idiomes = Idiomes_dft;
     var Idioma = Idiomes.find(Idioma => Idioma.IdIdioma == "ca");
+   
     // Funció per carregar la base de dades ContraSegur.db
     function AlaWeb_SQLite(IdIdioma) {  
         // window.alert("AlaWeb_SQLite IdIdioma = '" + IdIdioma + "'");
@@ -347,24 +349,30 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                 SQL_TextosGUI(IdIdioma, idiomes.pop());
             }
         ); 
-        // alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
-        //   SELECT Password FROM TblDiccionari WHERE IdIdioma IS NULL OR IdIdioma="ca" OR IdIdioma=""'),
-        // [], function(idiomes) {SQL_Diccionari(TblDiccionari = Password.pop());} // check probably not right
-        alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \
-            SELECT Password FROM TblDiccionari WHERE IdIdioma = ? OR IdIdioma = "" OR IdIdioma IS NULL;',
-        [IdIdioma],
-        function(rows) {
-            SQL_Diccionari(rows);
-        }
-    );
+        alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
+                SELECT Password FROM TblDiccionari \n\
+                WHERE IdIdioma IS NULL OR IdIdioma = "" OR IdIdioma = "' + IdIdioma + '";',
+            [], function(diccionari) {SQL_Diccionari(diccionari.pop());} // TBLDICCIONARI CHANGES copied directly from him
+        );  
     }
-    function SQL_Diccionari(TblDiccionari) {
-       if (TblDiccionari && TblDiccionari.length > 0) {
-           for (let i = 0; i < TblDiccionari.length; i++) {
-               diccionari.add(TblDiccionari[i].Password.toLowerCase());
-           }
-       }
-   }
+    
+    /* TBLDICCIONARI CHANGES atm it only calls the function when i switch first to another language (missing making it get catalan from the database first) 
+     * but when it does get called it says that it doesnt have an idioma and even the default passwords aren't coming up as common
+    */
+    function SQL_Diccionari(IdIdioma, TblDiccionari) {   
+        Diccionari.clear();
+        SqlDiccionari = [];
+        for (var i in TblDiccionari) {
+            Diccionari.add(TblDiccionari[i].Password);  
+            SqlDiccionari[i] = TblDiccionari[i].Password;
+        } 
+        if (Diccionari.size == 0) {
+            window.alert("Idioma sense contrasenyes / Idioma sin contraseñas / Language without passwords!");
+            Diccionari = diccionari; // TBLDICCIONARI CHANGES attempting to make it resort to the default set
+            IdIdioma = "ca";
+        }
+    }
+
     function SQL_TextosGUI(IdIdioma, TblTextosGUI) {
         Idiomes = TblTextosGUI;
         if (Idiomes.length == 0) {
