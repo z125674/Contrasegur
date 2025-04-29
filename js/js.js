@@ -19,8 +19,8 @@ var diccionarialt = ["password", "guest", "dragon", "baseball", "football", "mon
     "diablo", "bulldog", "compaq", "purple", "hardcore", "banana", "junior", "hannah", "porsche", "lakers", "iceman", 
     "money", "cowboys", "london", "tennis", "ncc1701", "coffee", "scooby", "miller", "boston", "q1w2e3r4", "fuckoff", 
     "brandon", "yamaha", "chester", "mother", "forever", "johnny", "edward", "oliver", "redsox", "player", "nikita"];
-var diccionari = new Set(diccionarialt);
-// var Diccionari = new Set(); // TBLDICCIONARI CHANGES here i made a new set for the database
+var diccionari = new Set(diccionarialt); 
+var Diccionari = new Set(); // TBLDICCIONARI CHANGES here i made a new set for the database
 var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /321/, /345/, /3ed/, /432/, /456/,  
     /4rf/, /543/, /567/, /5tg/, /654/, /678/, /6yh/, /765/, /789/, /7uj/, /876/, /890/, /8ik/, /987/, /9ol/, 
     /abc/, /aq1/, /aqw/, /asd/, /aze/, /bcç/, /bcd/, /bgt/, /bnm/, /bvc/, /cba/, /çcb/, /cçd/, /cde/, /çde/, 
@@ -32,6 +32,8 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     /rez/, /rfv/, /rqp/, /rst/, /rty/, /sdf/, /srq/, /stu/, /sw2/, /sz2/, /tgb/, /tre/, /tsr/, /tuv/, /tyu/, 
     /uio/, /ujm/, /uts/, /uvw/, /uyt/, /vbn/, /vcx/, /vfr/, /vut/, /vwx/, /wer/, /wqa/, /wsx/, /wvu/, /wxc/, 
     /wxy/, /xcv/, /xsw/, /xsz/, /xwv/, /xyz/, /yhn/, /ytr/, /yui/, /yxw/, /zaq/, /zer/, /zsx/, /zxc/, /zyx/]; 
+
+        var base = 0; 
             function Comprovar() {
                 document.getElementById("caracter").checked = false;
                 document.getElementById("majuscula").checked = false;
@@ -158,7 +160,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                 return repmult.test(Password.toLowerCase());
             }
            function checkdiccionari(Password) { 
-               return diccionari.has(Password.toLowerCase()); 
+               return Diccionari.has(Password.toLowerCase()); 
             }
 
             function checkpatrons(Password) {
@@ -333,6 +335,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     // Funció per carregar la base de dades ContraSegur.db
     function AlaWeb_SQLite(IdIdioma) {  
         // window.alert("AlaWeb_SQLite IdIdioma = '" + IdIdioma + "'");
+        
         config = {
             locateFile: filename => `/dist/${filename}`
         };
@@ -349,11 +352,11 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
                 SQL_TextosGUI(IdIdioma, idiomes.pop());
             }
         ); 
-        /* alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
+        alasql('ATTACH SQLITE DATABASE contrasegur("db/ContraSegur.db"); USE contrasegur; \n\
                 SELECT Password FROM TblDiccionari \n\
                 WHERE IdIdioma IS NULL OR IdIdioma = "" OR IdIdioma = "' + IdIdioma + '";',
             [], function(diccionari) {SQL_Diccionari(diccionari.pop());} // TBLDICCIONARI CHANGES copied directly from him
-        );  */
+        ); 
     }
     
     /* TBLDICCIONARI CHANGES atm it only calls the function when i switch first to another language (missing making it get catalan from the database first) 
@@ -372,6 +375,27 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
             IdIdioma = "ca";
         }
     } */
+    function SQL_Diccionari(TblDiccionari) {
+        // window.alert("SQL_Diccionari IdIdioma = '" + IdIdioma + "'");    
+        Diccionari.clear();
+        SqlDiccionari = [];
+        for (var i in TblDiccionari) {
+            // console.log("TblDiccionari[" + i + "].Password: " + TblDiccionari[i].Password);
+            Diccionari.add(TblDiccionari[i].Password);  
+            SqlDiccionari[i] = TblDiccionari[i].Password;
+        }
+        // window.alert(Diccionari.size);  
+        // if (Diccionari.length == 0) {
+        if (Diccionari.size == 0) {
+            window.alert("Idioma sense contrasenyes / Idioma sin contraseñas / Language without passwords!");
+            Diccionari = diccionari;
+            IdIdioma = "ca";
+            IdIdioma_ant = "ca";
+        } else {
+            // window.alert("Contrasenyes en idioma / Contraseñas en idioma / Language passwords = '" + IdIdioma + "'");
+        };
+        // window.alert(TblDiccionari[0].Password);
+   }
 
     function SQL_TextosGUI(IdIdioma, TblTextosGUI) {
         Idiomes = TblTextosGUI;
@@ -429,3 +453,4 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         // document.getElementById("Mostrartaula").innerHTML = Idioma.Mostrartaula;
         // document.getElementById("Amagartaula").innerHTML = Idioma.Amagartaula;
     }
+   
