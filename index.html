@@ -9,11 +9,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            #idioma {position:relative; top:-550px; left:150px;}
-            #teclado {position:relative; top:-270px; left: 300px;}
-            #showteclado {position:relative; top:-280px; left: -50px;}
+            #idioma {position:relative; top:-550px; left:700px;}
+            #Idiomes {position:relative; top:-575px; left:650px;}
+            #showPassword {position:relative; top:-285px; left: -90px;}
+            #teclado {position:relative; top:-290px; left: 370px;}
+            #showteclado {position:relative; top:-285px; left: -80px;}
             #taulaASCII {position: absolute; top: 700px; left: 15px;}
-            #showtaulaASCII {position: relative; top: 30px; left: -300px;}
+            #showtaulaASCII {position: relative; top: 30px; left: -300px;}  
+            #generatePassword{position:relative; top:-250px; left: 25px;}
+            #caracter:checked + label,
+            #majuscula:checked + label,
+            #minuscula:checked + label,
+            #numero:checked + label,
+            #especial:checked + label {
+              background-color: #b4ecb4;
+              color: black;
+              padding: 2px 6px;
+              border-radius: 4px;
+              margin-bottom: 4px;
+            }
+
+            #caracter + label,
+            #majuscula + label,
+            #minuscula + label,
+            #numero + label,
+            #especial + label {
+              background-color: #ffe6e6;
+              padding: 2px 6px;
+              border-radius: 4px;
+              margin-bottom: 4px;
+            }
         </style>
         <script src="js/zxcvbn-async.js" type="text/javascript"></script>
         <script src="js/js.js" type="text/javascript"></script>  
@@ -25,7 +50,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
         
     </head>
    <body onload="CanviarIdioma('ca');">
-        <img src="img/icono-centre.jpg">
+       <img src="img/icono-centre.jpg">
         <form>
             <label id="username">Usuari o correu:</label>
             <input type="text" id="Username"><br> 
@@ -49,7 +74,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
             <label>almenys un carácter especial.</label><br><br>
         </form>
         <label>Dèbil - Regular - Bona - Forta</label><br>
-        <progress id="Nivell" value="0" max="100"></progress><br>
+        <progress id="nivell" value="0" max="100"></progress><br>
         <div translate="no"> Weak - So-so - Great! - Strong</div>
        
         <div id="idioma" translate="no">
@@ -70,20 +95,47 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/html.html to edit this
        
         <a href="https://github.com/danielmiessler/SecLists/blob/master/Passwords/Common-Credentials/10-million-Password-list-top-100.txt"> Diccionari: </a>
         <input type="file" id="diccionari"/><br>
-        <a href="">Patrons: </a>
+        <a href="https://github.com/z125674/Contrasegur/blob/main/patrons2.txt">Patrons: </a>
         <input type="file" id="patrons"/>
 
-        <script>
-            document.getElementById('diccionari').addEventListener('change', readSingleFile, false);
-            document.getElementById('patrons').addEventListener('change', readSingleFile, false);
-        </script>
+        <button id="insertbutton" type="button" onclick="insert(document.getElementById('Idiomes').value);"><img src="img/insert.png" alt=""></button>
+        <button id="updatebutton" type="button" onclick="update(document.getElementById('Idiomes').value);"><img src="img/update.png" alt=""></button>
         <button id="generatePassword" type="button" onclick="generateAndSetPassword();"> 
-        <img src="img/update.png" alt=""></button>
+        <img src="img/generate.png" alt="" width="25"></button>
         <button id="showPassword" type="button" onclick="showPassword();">Mostrar</button>
         <button id="showteclado" type="button" onclick="funcionteclado();"><img src="img/keyboard.png" alt=""></button>
         <button id="showtaulaASCII" type="button" onclick="funciontaulaASCII();">Mostrar taula ASCII</button>
         
-   
+        <script>
+            document.getElementById('diccionari').addEventListener('change', readSingleFile, false);
+            document.getElementById('patrons').addEventListener('change', readSingleFile, false);
+        </script>
+   <script src='https://cdn.jotfor.ms/s/umd/latest/for-embedded-agent.js'></script>
+        <script>
+          window.addEventListener("DOMContentLoaded", function() {
+            window.AgentInitializer.init({
+              agentRenderURL: "https://eu.jotform.com/agent/0196a58c1a05789bab7820474a490b78f311",
+              rootId: "JotformAgent-0196a58c1a05789bab7820474a490b78f311",
+              formID: "0196a58c1a05789bab7820474a490b78f311",
+              queryParams: ["skipWelcome=1", "maximizable=1"],
+              domain: "https://eu.jotform.com",
+              isDraggable: false,
+              background: "linear-gradient(180deg, #B3D37B 0%, #B3D37B 100%)",
+              buttonBackgroundColor: "#3C4C1E",
+              buttonIconColor: "#FFF",
+              variant: false,
+              customizations: {
+                "greeting": "Yes",
+                "greetingMessage": "Hi! How can I assist you?",
+                "openByDefault": "No",
+                "pulse": "Yes",
+                "position": "right",
+                "autoOpenChatIn": "0"
+              },
+              isVoice: false,
+            });
+          });
+        </script>
         <div id="teclado" translate="no" hidden>
             <table id="Minus"><strong>
                 <tr>
