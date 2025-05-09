@@ -33,7 +33,6 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     /uio/, /ujm/, /uts/, /uvw/, /uyt/, /vbn/, /vcx/, /vfr/, /vut/, /vwx/, /wer/, /wqa/, /wsx/, /wvu/, /wxc/, 
     /wxy/, /xcv/, /xsw/, /xsz/, /xwv/, /xyz/, /yhn/, /ytr/, /yui/, /yxw/, /zaq/, /zer/, /zsx/, /zxc/, /zyx/]; 
 
-        var base = 0; 
             function Comprovar() {
                 document.getElementById("caracter").checked = false;
                 document.getElementById("majuscula").checked = false;
@@ -331,6 +330,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     ];
     var Idiomes = Idiomes_dft;
     var Idioma = Idiomes.find(Idioma => Idioma.IdIdioma == "ca");
+    // var IdIdioma = "ca"; 
    
     // Funció per carregar la base de dades ContraSegur.db
     function AlaWeb_SQLite(IdIdioma) {  
@@ -359,22 +359,6 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         ); 
     }
     
-    /* TBLDICCIONARI CHANGES atm it only calls the function when i switch first to another language (missing making it get catalan from the database first) 
-     * but when it does get called it says that it doesnt have an idioma and even the default passwords aren't coming up as common
-    */
-    /* function SQL_Diccionari(IdIdioma, TblDiccionari) {   
-        Diccionari.clear();
-        SqlDiccionari = [];
-        for (var i in TblDiccionari) {
-            Diccionari.add(TblDiccionari[i].Password);  
-            SqlDiccionari[i] = TblDiccionari[i].Password;
-        } 
-        if (Diccionari.size == 0) {
-            window.alert("Idioma sense contrasenyes / Idioma sin contraseñas / Language without passwords!");
-            Diccionari = diccionari; // TBLDICCIONARI CHANGES attempting to make it resort to the default set
-            IdIdioma = "ca";
-        }
-    } */
     function SQL_Diccionari(TblDiccionari) {
         // window.alert("SQL_Diccionari IdIdioma = '" + IdIdioma + "'");    
         Diccionari.clear();
@@ -403,7 +387,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
             Idiomes = Idiomes_dft;
         }
         if(Idiomes.find(Idioma => Idioma.IdIdioma == IdIdioma) == undefined) {
-            window.alert("GUI: not found");
+            window.alert("No s'han trobat textos de la GUI / Textos de la GUI no encontrados / GUI texts not found ");
             Idiomes = Idiomes_dft;
         }
     }  
@@ -453,4 +437,60 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         // document.getElementById("Mostrartaula").innerHTML = Idioma.Mostrartaula;
         // document.getElementById("Amagartaula").innerHTML = Idioma.Amagartaula;
     }
+        function update(IdIdioma) {
+         const myWindow = window.open("", "_blank", "width=640, height=640, left=15, top=235,\n\
+             location=0, menubar=0, resizable=0, scrollbars=0, status=0, titlebar=0, toolbar=0");
+         myWindow.document.open();
+         myWindow.document.write("<html><head><title>SQL UPDATE TblDiccionari for SQLite Sudio</title></head>" +
+             "<body style='background-size: 640px 604px; " +
+             'background-image: url("img/passwordCL.png"); background-repeat: no-repeat;' +
+             "'><p><a href='https://sqlitesudio.netlify.app/&#39; target='_blank'> \n\
+             <font size='+2'>SQL UPDATE TblDiccionari for SQLite Sudio IdIdioma='" + IdIdioma + "'</font></a></p>");
+         // window.alert(SqlDiccionari);
+         Diccionari.forEach (function(Password) {
+             if (SqlDiccionari.includes(Password)) {
+                 myWindow.document.write("<p>UPDATE TblDiccionari SET <br>&nbsp;&nbsp;&nbsp; \n\
+                     MD5 = '" + md5(Password) + "', <br>&nbsp;&nbsp;&nbsp; \n\
+                     SHA1 = '" + SHA1(Password) + "'<br> WHERE TblDiccionari.Password = '" + Password + "';</p>");
+             }
+         })
+         myWindow.document.write("</body></html>");
+         myWindow.document.close();            
+     }
+        function insert(IdIdioma) {
+        const myWindow = window.open("", "_blank", "width=640,height=640,left=15,top=235,location=0,menubar=0,resizable=0,scrollbars=0,status=0,titlebar=0,toolbar=0");
+        myWindow.document.open();
+
+        myWindow.document.write(`
+            <html>
+                <head>
+                    <title>SQL INSERT TblDiccionari for SQLite Studio</title>
+                </head>
+                <body style="background-size: 640px 604px; background-image: url('img/passwordCL.png'); background-repeat: no-repeat;">
+                    <p>
+                        <a href="https://sqlitesudio.netlify.app/" target="_blank">
+                            <font size="+2">SQL UPDATE TblDiccionari for SQLite Studio IdIdioma='${IdIdioma}'</font>
+                        </a>
+                    </p>
+                    <p>DELETE FROM TblDiccionari WHERE IdIdioma='${IdIdioma}';</p>
+        `);
+
+        Diccionari.forEach(function(Password) {
+            if (SqlDiccionari.includes(Password)) {
+                const md5Hash = md5(Password);
+                const sha1Hash = SHA1(Password);
+                myWindow.document.write(`
+                    <p>INSERT INTO TblDiccionari(Password, IdIdioma, MD5, SHA1) VALUES ('${Password}', '${IdIdioma}', '${md5Hash}', '${sha1Hash}');</p>
+                `);
+            }
+        });
+
+        myWindow.document.write(`
+                </body>
+            </html>
+        `);
+        myWindow.document.close();
+    }
+
+        
    
