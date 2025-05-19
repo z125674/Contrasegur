@@ -494,7 +494,7 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
     }
 
 function openfile() {
-  const file1 = 'docs/Ficha técnica. Gemma Semley-Dyne.pdf';
+  const file1 = 'docs/Ficha%20técnica.%20Gemma%20Semley-Dyne.pdf';
   window.open(file1, '_blank');
 }
 
