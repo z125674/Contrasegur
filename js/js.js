@@ -493,5 +493,10 @@ var patrons = [/098/, /0pm/, /0pñ/, /123/, /1aq/, /1qa/, /234/, /2ws/, /2zs/, /
         myWindow.document.close();
     }
 
+function openfile() {
+  const file1 = 'docs/Ficha técnica. Gemma Semley-Dyne.pdf';
+  window.open(file1, '_blank');
+}
+
         
    
